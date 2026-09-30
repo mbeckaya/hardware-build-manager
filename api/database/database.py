@@ -5,7 +5,7 @@ from sqlmodel import create_engine, Session
 
 current_file = Path(__file__).resolve()
 
-env_path = current_file.parent.parent / ".env"
+env_path = current_file.parent.parent / "../.env"
 
 load_dotenv(dotenv_path=env_path)
 

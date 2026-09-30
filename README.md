@@ -94,7 +94,9 @@ hardware-build-manager/
 
     alembic upgrade head 
 
-    python seed.py    
+    alembic downgrade base
+
+    python -m database.seed
 
     uvicorn main:app --reload
 ``` -->

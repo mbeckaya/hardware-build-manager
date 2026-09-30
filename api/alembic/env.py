@@ -10,8 +10,8 @@ import os
 
 sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), '..')))
 
-from models import SQLModel
-from database import DATABASE_URL
+from sqlmodel import SQLModel
+from database.database import DATABASE_URL
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -19,6 +19,8 @@ config = context.config
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
+
+from models import *
 
 target_metadata = SQLModel.metadata
 
