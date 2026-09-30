@@ -1,17 +1,17 @@
 # Hardware Build Manager
 
-> 🚧 **Status: In Planning**
+<!-- > 🚧 **Status: In Planning** -->
+
+
+> 🚧 **Status: In Progress**
+
 
 <!--
-🚧 **Status: In Progress**
+> ✅ **Status: Completed**
 -->
 
 <!--
-✅ **Status: Completed**
--->
-
-<!--
-🔄 **Status: Maintenance**
+> 🔄 **Status: Maintenance**
 -->
 
 A full-stack application for creating, managing, and tracking computer builds, hardware components, compatibility, purchases, maintenance, and upgrades.
@@ -53,12 +53,48 @@ Additional functionality will be defined as the project evolves.
 
 ## Tech Stack
 
-> **Coming soon**
+### Backend
 
-The technology stack will be documented once the technical concept has been finalized.
+- ⚡ **Python + FastAPI** — High-performance asynchronous REST API
+- 📐 **Pydantic** — Data validation and settings management
+- 🗃️ **SQLModel & Alembic** — Modern Python ORM (built on SQLAlchemy) & database migrations
+- 🗄️ **MariaDB** — Relational database
+- 🧪 **pytest & HTTPX** — API testing
+
+### Frontend
+
+- ⚛️ **React + TypeScript**
+- 🧰 **Redux Toolkit + RTK Query** — State management & efficient data fetching
+- 🎨 **Tailwind CSS + daisyUI** — UI styling & components
+
+### Infrastructure
+
+- 🐳 **Docker + Docker Compose**
 
 ## Project Structure
 
-> **Coming soon**
+```text
+hardware-build-manager/
+├── api/   # Python + FastAPI + SQLModel + Alembic
+└── web/   # React + TypeScript + Redux Toolkit
+```
 
-The project structure will be documented once the application architecture has been defined.
+<!-- ```shell
+    python -m venv .venv
+
+    .venv\Scripts\Activate.ps1
+
+    pip install fastapi uvicorn sqlmodel pymysql alembic
+
+    pip freeze > requirements.txt 
+
+    alembic init alembic    
+
+    alembic revision --autogenerate -m "create tasks table"
+
+    alembic upgrade head 
+
+    python seed.py    
+
+    uvicorn main:app --reload
+``` -->
