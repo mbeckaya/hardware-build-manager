@@ -103,4 +103,8 @@ hardware-build-manager/
     uvicorn main:app --reload
 
     python -m pytest
+
+    npm install
+
+    npm run dev
 ``` -->
