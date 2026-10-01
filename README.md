@@ -80,6 +80,8 @@ hardware-build-manager/
 ```
 
 <!-- ```shell
+    docker compose up -d --build
+
     python -m venv .venv
 
     .venv\Scripts\Activate.ps1
@@ -99,4 +101,6 @@ hardware-build-manager/
     python -m database.seed
 
     uvicorn main:app --reload
+
+    python -m pytest
 ``` -->

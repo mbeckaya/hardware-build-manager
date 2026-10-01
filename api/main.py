@@ -1,13 +1,13 @@
 from fastapi import FastAPI, Depends
-from sqlmodel import Session, select
 
-from database.database import get_session
+from controllers.build_controller import BuildController
 from models.build import Build
+from routes.build_routes import router as build_router
 
 app = FastAPI(title="Hardware Build Manager", version="1.0.0")
 
-@app.get("/api/v1/builds/", response_model=list[Build])
-def get_builds(session: Session = Depends(get_session)):
-    builds = session.exec(select(Build)).all()
+app.include_router(build_router)
 
-    return builds
+@app.get("/")
+def root():
+    return {"message": "API is running"}

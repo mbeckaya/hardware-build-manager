@@ -5,7 +5,7 @@ class Build(SQLModel, table=True):
     __tablename__ = "builds"
 
     id: int | None = Field(default=None, primary_key=True)
-    name: str
+    name: str = Field(unique=True)
     build_type_id: int = Field(foreign_key="build_types.id", index=True)
     cpu: str
     gpu: str
