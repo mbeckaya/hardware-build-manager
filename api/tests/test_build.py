@@ -2,6 +2,7 @@ import httpx
 import random
 import string
 from fastapi import status
+
 from models.build import Build
 
 BASE_URL = "http://127.0.0.1:8000/api/v1/builds"
