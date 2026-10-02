@@ -2,9 +2,9 @@ import { useState } from 'react';
 
 import type { Build, BuildFormErrors } from '../../types/build';
 import { buildSchema } from '../../schemas/buildSchema';
-
-import AlertMessage from '../AlertMessage';
 import { useGetAllBuildTypesQuery } from '../../api/buildTypesApi';
+
+import FormInputRow from '../FormInputRow';
 
 type Props = {
     data: Build;
@@ -71,11 +71,8 @@ export default function BuildForm({ data, onSubmitSuccess }: Props) {
 
     return (
         <form onSubmit={handleSubmit} className="space-y-6 p-6">
-            <div className="space-y-2">
-                <label htmlFor="name" className="block font-medium">
-                    Name*:
-                </label>
-
+            {/* Name */}
+            <FormInputRow id="name" label="Name*" error={formErrors?.name}>
                 <input
                     id="name"
                     name="name"
@@ -84,21 +81,14 @@ export default function BuildForm({ data, onSubmitSuccess }: Props) {
                     onChange={handleChange}
                     className="input input-bordered w-full"
                 />
+            </FormInputRow>
 
-                {formErrors?.name && (
-                    <div className="pt-1">
-                        <AlertMessage type="error">
-                            <p>{formErrors.name}</p>
-                        </AlertMessage>
-                    </div>
-                )}
-            </div>
-
-            <div className="space-y-2">
-                <label htmlFor="build_type_id" className="block font-medium">
-                    Build-Typ*:
-                </label>
-
+            {/* Build-Typ (Select) */}
+            <FormInputRow
+                id="build_type_id"
+                label="Build-Typ*"
+                error={formErrors?.build_type_id}
+            >
                 <select
                     id="build_type_id"
                     name="build_type_id"
@@ -109,30 +99,18 @@ export default function BuildForm({ data, onSubmitSuccess }: Props) {
                     <option value="" disabled>
                         -- Please choose --
                     </option>
-
                     {buildTypes.map((bt) => (
                         <option key={bt.id} value={bt.id}>
                             {bt.name}
                         </option>
                     ))}
                 </select>
-
-                {formErrors?.build_type_id && (
-                    <div className="pt-1">
-                        <AlertMessage type="error">
-                            <p>{formErrors.build_type_id}</p>
-                        </AlertMessage>
-                    </div>
-                )}
-            </div>
+            </FormInputRow>
 
             <div className="divider">Hardware</div>
 
-            <div className="space-y-2">
-                <label htmlFor="cpu" className="block font-medium">
-                    CPU*:
-                </label>
-
+            {/* CPU */}
+            <FormInputRow id="cpu" label="CPU*" error={formErrors?.cpu}>
                 <input
                     id="cpu"
                     name="cpu"
@@ -141,21 +119,10 @@ export default function BuildForm({ data, onSubmitSuccess }: Props) {
                     onChange={handleChange}
                     className="input input-bordered w-full"
                 />
+            </FormInputRow>
 
-                {formErrors?.cpu && (
-                    <div className="pt-1">
-                        <AlertMessage type="error">
-                            <p>{formErrors.cpu}</p>
-                        </AlertMessage>
-                    </div>
-                )}
-            </div>
-
-            <div className="space-y-2">
-                <label htmlFor="gpu" className="block font-medium">
-                    GPU*:
-                </label>
-
+            {/* GPU */}
+            <FormInputRow id="gpu" label="GPU*" error={formErrors?.gpu}>
                 <input
                     id="gpu"
                     name="gpu"
@@ -164,21 +131,10 @@ export default function BuildForm({ data, onSubmitSuccess }: Props) {
                     onChange={handleChange}
                     className="input input-bordered w-full"
                 />
+            </FormInputRow>
 
-                {formErrors?.gpu && (
-                    <div className="pt-1">
-                        <AlertMessage type="error">
-                            <p>{formErrors.gpu}</p>
-                        </AlertMessage>
-                    </div>
-                )}
-            </div>
-
-            <div className="space-y-2">
-                <label htmlFor="ram" className="block font-medium">
-                    RAM*:
-                </label>
-
+            {/* RAM */}
+            <FormInputRow id="ram" label="RAM*" error={formErrors?.ram}>
                 <input
                     id="ram"
                     name="ram"
@@ -187,21 +143,14 @@ export default function BuildForm({ data, onSubmitSuccess }: Props) {
                     onChange={handleChange}
                     className="input input-bordered w-full"
                 />
+            </FormInputRow>
 
-                {formErrors?.ram && (
-                    <div className="pt-1">
-                        <AlertMessage type="error">
-                            <p>{formErrors.ram}</p>
-                        </AlertMessage>
-                    </div>
-                )}
-            </div>
-
-            <div className="space-y-2">
-                <label htmlFor="storage" className="block font-medium">
-                    Storage*:
-                </label>
-
+            {/* Storage */}
+            <FormInputRow
+                id="storage"
+                label="Storage*"
+                error={formErrors?.storage}
+            >
                 <input
                     id="storage"
                     name="storage"
@@ -210,21 +159,14 @@ export default function BuildForm({ data, onSubmitSuccess }: Props) {
                     onChange={handleChange}
                     className="input input-bordered w-full"
                 />
+            </FormInputRow>
 
-                {formErrors?.storage && (
-                    <div className="pt-1">
-                        <AlertMessage type="error">
-                            <p>{formErrors.storage}</p>
-                        </AlertMessage>
-                    </div>
-                )}
-            </div>
-
-            <div className="space-y-2">
-                <label htmlFor="psu" className="block font-medium">
-                    Power Supply*:
-                </label>
-
+            {/* PSU */}
+            <FormInputRow
+                id="psu"
+                label="Power Supply*"
+                error={formErrors?.psu}
+            >
                 <input
                     id="psu"
                     name="psu"
@@ -233,21 +175,14 @@ export default function BuildForm({ data, onSubmitSuccess }: Props) {
                     onChange={handleChange}
                     className="input input-bordered w-full"
                 />
+            </FormInputRow>
 
-                {formErrors?.psu && (
-                    <div className="pt-1">
-                        <AlertMessage type="error">
-                            <p>{formErrors.psu}</p>
-                        </AlertMessage>
-                    </div>
-                )}
-            </div>
-
-            <div className="space-y-2">
-                <label htmlFor="mainboard" className="block font-medium">
-                    Mainboard*:
-                </label>
-
+            {/* Mainboard */}
+            <FormInputRow
+                id="mainboard"
+                label="Mainboard*"
+                error={formErrors?.mainboard}
+            >
                 <input
                     id="mainboard"
                     name="mainboard"
@@ -256,21 +191,14 @@ export default function BuildForm({ data, onSubmitSuccess }: Props) {
                     onChange={handleChange}
                     className="input input-bordered w-full"
                 />
+            </FormInputRow>
 
-                {formErrors?.mainboard && (
-                    <div className="pt-1">
-                        <AlertMessage type="error">
-                            <p>{formErrors.mainboard}</p>
-                        </AlertMessage>
-                    </div>
-                )}
-            </div>
-
-            <div className="space-y-2">
-                <label htmlFor="cpu_cooler" className="block font-medium">
-                    CPU Cooler*:
-                </label>
-
+            {/* CPU Cooler */}
+            <FormInputRow
+                id="cpu_cooler"
+                label="CPU Cooler*"
+                error={formErrors?.cpu_cooler}
+            >
                 <input
                     id="cpu_cooler"
                     name="cpu_cooler"
@@ -279,21 +207,10 @@ export default function BuildForm({ data, onSubmitSuccess }: Props) {
                     onChange={handleChange}
                     className="input input-bordered w-full"
                 />
+            </FormInputRow>
 
-                {formErrors?.cpu_cooler && (
-                    <div className="pt-1">
-                        <AlertMessage type="error">
-                            <p>{formErrors.cpu_cooler}</p>
-                        </AlertMessage>
-                    </div>
-                )}
-            </div>
-
-            <div className="space-y-2">
-                <label htmlFor="case" className="block font-medium">
-                    Case*:
-                </label>
-
+            {/* Case */}
+            <FormInputRow id="case" label="Case*" error={formErrors?.case}>
                 <input
                     id="case"
                     name="case"
@@ -302,21 +219,14 @@ export default function BuildForm({ data, onSubmitSuccess }: Props) {
                     onChange={handleChange}
                     className="input input-bordered w-full"
                 />
+            </FormInputRow>
 
-                {formErrors?.case && (
-                    <div className="pt-1">
-                        <AlertMessage type="error">
-                            <p>{formErrors.case}</p>
-                        </AlertMessage>
-                    </div>
-                )}
-            </div>
-
-            <div className="space-y-2">
-                <label htmlFor="os" className="block font-medium">
-                    Operating System*:
-                </label>
-
+            {/* OS */}
+            <FormInputRow
+                id="os"
+                label="Operating System*"
+                error={formErrors?.os}
+            >
                 <input
                     id="os"
                     name="os"
@@ -325,21 +235,14 @@ export default function BuildForm({ data, onSubmitSuccess }: Props) {
                     onChange={handleChange}
                     className="input input-bordered w-full"
                 />
+            </FormInputRow>
 
-                {formErrors?.os && (
-                    <div className="pt-1">
-                        <AlertMessage type="error">
-                            <p>{formErrors.os}</p>
-                        </AlertMessage>
-                    </div>
-                )}
-            </div>
-
-            <div className="space-y-2">
-                <label htmlFor="sound_card" className="block font-medium">
-                    Sound Card
-                </label>
-
+            {/* Sound Card */}
+            <FormInputRow
+                id="sound_card"
+                label="Sound Card"
+                error={formErrors?.sound_card}
+            >
                 <input
                     id="sound_card"
                     name="sound_card"
@@ -348,23 +251,16 @@ export default function BuildForm({ data, onSubmitSuccess }: Props) {
                     onChange={handleChange}
                     className="input input-bordered w-full"
                 />
-
-                {formErrors?.sound_card && (
-                    <div className="pt-1">
-                        <AlertMessage type="error">
-                            <p>{formErrors.sound_card}</p>
-                        </AlertMessage>
-                    </div>
-                )}
-            </div>
+            </FormInputRow>
 
             <div className="divider">Warranty & Maintenance</div>
 
-            <div className="space-y-2">
-                <label htmlFor="warranty" className="block font-medium">
-                    Warranty
-                </label>
-
+            {/* Warranty */}
+            <FormInputRow
+                id="warranty"
+                label="Warranty"
+                error={formErrors?.warranty}
+            >
                 <input
                     id="warranty"
                     name="warranty"
@@ -373,24 +269,14 @@ export default function BuildForm({ data, onSubmitSuccess }: Props) {
                     onChange={handleChange}
                     className="input input-bordered w-full"
                 />
+            </FormInputRow>
 
-                {formErrors?.warranty && (
-                    <div className="pt-1">
-                        <AlertMessage type="error">
-                            <p>{formErrors.warranty}</p>
-                        </AlertMessage>
-                    </div>
-                )}
-            </div>
-
-            <div className="space-y-2">
-                <label
-                    htmlFor="last_maintenance_at"
-                    className="block font-medium"
-                >
-                    Last Maintenance
-                </label>
-
+            {/* Last Maintenance */}
+            <FormInputRow
+                id="last_maintenance_at"
+                label="Last Maintenance"
+                error={formErrors?.last_maintenance_at}
+            >
                 <input
                     id="last_maintenance_at"
                     name="last_maintenance_at"
@@ -399,24 +285,14 @@ export default function BuildForm({ data, onSubmitSuccess }: Props) {
                     onChange={handleChange}
                     className="input input-bordered w-full"
                 />
+            </FormInputRow>
 
-                {formErrors?.last_maintenance_at && (
-                    <div className="pt-1">
-                        <AlertMessage type="error">
-                            <p>{formErrors.last_maintenance_at}</p>
-                        </AlertMessage>
-                    </div>
-                )}
-            </div>
-
-            <div className="space-y-2">
-                <label
-                    htmlFor="last_maintenance_comment"
-                    className="block font-medium"
-                >
-                    Last Maintenance Comment
-                </label>
-
+            {/* Last Maintenance Comment (Textarea) */}
+            <FormInputRow
+                id="last_maintenance_comment"
+                label="Last Maintenance Comment"
+                error={formErrors?.last_maintenance_comment}
+            >
                 <textarea
                     id="last_maintenance_comment"
                     name="last_maintenance_comment"
@@ -425,24 +301,14 @@ export default function BuildForm({ data, onSubmitSuccess }: Props) {
                     className="textarea textarea-bordered w-full"
                     rows={3}
                 />
+            </FormInputRow>
 
-                {formErrors?.last_maintenance_comment && (
-                    <div className="pt-1">
-                        <AlertMessage type="error">
-                            <p>{formErrors.last_maintenance_comment}</p>
-                        </AlertMessage>
-                    </div>
-                )}
-            </div>
-
-            <div className="space-y-2">
-                <label
-                    htmlFor="next_maintenance_at"
-                    className="block font-medium"
-                >
-                    Next Maintenance
-                </label>
-
+            {/* Next Maintenance */}
+            <FormInputRow
+                id="next_maintenance_at"
+                label="Next Maintenance"
+                error={formErrors?.next_maintenance_at}
+            >
                 <input
                     id="next_maintenance_at"
                     name="next_maintenance_at"
@@ -451,24 +317,14 @@ export default function BuildForm({ data, onSubmitSuccess }: Props) {
                     onChange={handleChange}
                     className="input input-bordered w-full"
                 />
+            </FormInputRow>
 
-                {formErrors?.next_maintenance_at && (
-                    <div className="pt-1">
-                        <AlertMessage type="error">
-                            <p>{formErrors.next_maintenance_at}</p>
-                        </AlertMessage>
-                    </div>
-                )}
-            </div>
-
-            <div className="space-y-2">
-                <label
-                    htmlFor="next_maintenance_comment"
-                    className="block font-medium"
-                >
-                    Next Maintenance Comment
-                </label>
-
+            {/* Next Maintenance Comment (Textarea) */}
+            <FormInputRow
+                id="next_maintenance_comment"
+                label="Next Maintenance Comment"
+                error={formErrors?.next_maintenance_comment}
+            >
                 <textarea
                     id="next_maintenance_comment"
                     name="next_maintenance_comment"
@@ -477,19 +333,11 @@ export default function BuildForm({ data, onSubmitSuccess }: Props) {
                     className="textarea textarea-bordered w-full"
                     rows={3}
                 />
-
-                {formErrors?.next_maintenance_comment && (
-                    <div className="pt-1">
-                        <AlertMessage type="error">
-                            <p>{formErrors.next_maintenance_comment}</p>
-                        </AlertMessage>
-                    </div>
-                )}
-            </div>
+            </FormInputRow>
 
             <div className="flex justify-end pt-4">
                 <button type="submit" className="btn btn-primary">
-                    Save Build
+                    Save
                 </button>
             </div>
         </form>
