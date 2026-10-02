@@ -1,7 +1,13 @@
-import { useGetAllBuildsQuery } from '../api/buildsApi';
+import { Link } from 'react-router';
+import { EyeIcon, TrashIcon } from '@heroicons/react/24/outline';
 
-import LoadingSpinner from './LoadingSpinner';
-import AlertMessage from './AlertMessage';
+import {
+    useDestroyBuildByIdMutation,
+    useGetAllBuildsQuery,
+} from '../../api/buildsApi';
+
+import LoadingSpinner from '../LoadingSpinner';
+import AlertMessage from '../AlertMessage';
 
 export default function BuildList() {
     const {
@@ -11,6 +17,12 @@ export default function BuildList() {
     } = useGetAllBuildsQuery(undefined, {
         refetchOnMountOrArgChange: true,
     });
+
+    const [destroyById] = useDestroyBuildByIdMutation();
+
+    const handleRemove = async (id: number) => {
+        await destroyById(id).unwrap();
+    };
 
     if (isLoading) {
         return <LoadingSpinner />;
@@ -42,6 +54,7 @@ export default function BuildList() {
                         <th>Storage</th>
                         <th>OS</th>
                         <th>Wartung</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
 
@@ -57,6 +70,21 @@ export default function BuildList() {
                             <td>{build.storage}</td>
                             <td>{build.os}</td>
                             <td>{build.next_maintenance_at ?? '-'}</td>
+                            <td className="flex gap-2">
+                                <Link
+                                    to={`/builds/${build.id}`}
+                                    className="btn btn-soft btn-info"
+                                >
+                                    <EyeIcon className="size-5" /> Show
+                                </Link>
+
+                                <button
+                                    onClick={() => handleRemove(build.id)}
+                                    className="btn btn-soft btn-error"
+                                >
+                                    <TrashIcon className="size-5" /> Remove
+                                </button>
+                            </td>
                         </tr>
                     ))}
                 </tbody>
