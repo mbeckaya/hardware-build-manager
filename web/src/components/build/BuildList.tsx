@@ -1,5 +1,5 @@
 import { Link } from 'react-router';
-import { EyeIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { EyeIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 
 import {
     useDestroyBuildByIdMutation,
@@ -76,6 +76,13 @@ export default function BuildList() {
                                     className="btn btn-soft btn-info"
                                 >
                                     <EyeIcon className="size-5" /> Show
+                                </Link>
+
+                                <Link
+                                    to={`/builds/${build.id}/edit`}
+                                    className="btn btn-soft btn-warning"
+                                >
+                                    <PencilIcon className="size-5" /> Edit
                                 </Link>
 
                                 <button

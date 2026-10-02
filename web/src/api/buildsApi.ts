@@ -52,6 +52,7 @@ export const buildsApi = createApi({
 export const {
     useGetAllBuildsQuery,
     useGetBuildByIdQuery,
+    useUpdateBuildMutation,
     useCreateBuildMutation,
     useDestroyBuildByIdMutation,
 } = buildsApi;
