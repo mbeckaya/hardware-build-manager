@@ -5,6 +5,8 @@ import {
     useDestroyBuildByIdMutation,
     useGetAllBuildsQuery,
 } from '../../api/buildsApi';
+import { useGetAllBuildTypesQuery } from '../../api/buildTypesApi';
+import type { BuildWithMappedType } from '../../types/build';
 
 import LoadingSpinner from '../LoadingSpinner';
 import AlertMessage from '../AlertMessage';
@@ -12,11 +14,17 @@ import AlertMessage from '../AlertMessage';
 export default function BuildList() {
     const {
         data: builds = [],
-        isLoading,
-        error,
+        isLoading: isLoadingBuilds,
+        error: errorBuilds,
     } = useGetAllBuildsQuery(undefined, {
         refetchOnMountOrArgChange: true,
     });
+
+    const {
+        data: buildTypes = [],
+        isLoading: isLoadingBuildTypes,
+        error: errorBuildTypes,
+    } = useGetAllBuildTypesQuery();
 
     const [destroyById] = useDestroyBuildByIdMutation();
 
@@ -24,11 +32,22 @@ export default function BuildList() {
         await destroyById(id).unwrap();
     };
 
-    if (isLoading) {
+    const buildsWithTypes: BuildWithMappedType[] = builds.map((build) => {
+        const buildType = buildTypes.find(
+            (bt) => bt.id === build.build_type_id,
+        );
+
+        return {
+            ...build,
+            build_type: buildType?.name ?? null,
+        };
+    });
+
+    if (isLoadingBuilds || isLoadingBuildTypes) {
         return <LoadingSpinner />;
     }
 
-    if (error) {
+    if (errorBuilds || errorBuildTypes) {
         return (
             <AlertMessage type="error">
                 <span>Loading Builds</span>
@@ -36,7 +55,7 @@ export default function BuildList() {
         );
     }
 
-    if (builds.length === 0) {
+    if (buildsWithTypes.length === 0) {
         return <p>No builds</p>;
     }
 
@@ -59,11 +78,11 @@ export default function BuildList() {
                 </thead>
 
                 <tbody>
-                    {builds.map((build) => (
+                    {buildsWithTypes.map((build) => (
                         <tr key={build.id}>
                             <td>{build.id}</td>
                             <td>{build.name}</td>
-                            <td>{build.build_type_id}</td>
+                            <td>{build.build_type}</td>
                             <td>{build.cpu}</td>
                             <td>{build.gpu}</td>
                             <td>{build.ram}</td>

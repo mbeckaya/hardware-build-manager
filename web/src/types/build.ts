@@ -21,25 +21,8 @@ export type Build = {
     created_at: string;
 };
 
-export type CreateBuild = {
-    name: string;
-    build_type_id: number;
-    cpu: string;
-    gpu: string;
-    ram: string;
-    storage: string;
-    psu: string;
-    mainboard: string;
-    cpu_cooler: string;
-    case: string;
-    os: string;
-
-    sound_card: string | null;
-    warranty: string | null;
-    last_maintenance_at: string | null;
-    last_maintenance_comment: string | null;
-    next_maintenance_at: string | null;
-    next_maintenance_comment: string | null;
+export type BuildWithMappedType = Build & {
+    build_type: string | null;
 };
 
 export type BuildFormErrors = {

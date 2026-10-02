@@ -4,6 +4,7 @@ import type { Build, BuildFormErrors } from '../../types/build';
 import { buildSchema } from '../../schemas/buildSchema';
 
 import AlertMessage from '../AlertMessage';
+import { useGetAllBuildTypesQuery } from '../../api/buildTypesApi';
 
 type Props = {
     data: Build;
@@ -13,6 +14,7 @@ type Props = {
 export default function BuildForm({ data, onSubmitSuccess }: Props) {
     const [formData, setFormData] = useState<Build>(data);
     const [formErrors, setFormErrors] = useState<BuildFormErrors>({});
+    const { data: buildTypes = [] } = useGetAllBuildTypesQuery();
 
     const handleChange = (
         event: React.ChangeEvent<
@@ -94,17 +96,26 @@ export default function BuildForm({ data, onSubmitSuccess }: Props) {
 
             <div className="space-y-2">
                 <label htmlFor="build_type_id" className="block font-medium">
-                    Build Type*:
+                    Build-Typ*:
                 </label>
 
-                <input
+                <select
                     id="build_type_id"
                     name="build_type_id"
-                    type="number"
                     value={formData.build_type_id}
                     onChange={handleChange}
                     className="input input-bordered w-full"
-                />
+                >
+                    <option value="" disabled>
+                        -- Please choose --
+                    </option>
+
+                    {buildTypes.map((bt) => (
+                        <option key={bt.id} value={bt.id}>
+                            {bt.name}
+                        </option>
+                    ))}
+                </select>
 
                 {formErrors?.build_type_id && (
                     <div className="pt-1">

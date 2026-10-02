@@ -5,7 +5,7 @@ import { getApiErrorMessage } from '../../api/apiError';
 import { useCreateBuildMutation } from '../../api/buildsApi';
 import type { Build } from '../../types/build';
 
-import BuildForm from './BuildCreateForm';
+import BuildForm from './BuildForm';
 import AlertMessage from '../AlertMessage';
 
 export default function BuildCreate() {

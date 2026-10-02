@@ -8,7 +8,7 @@ import {
 import { getApiErrorMessage } from '../../api/apiError';
 import type { Build } from '../../types/build';
 
-import BuildForm from './BuildCreateForm';
+import BuildForm from './BuildForm';
 import LoadingSpinner from '../LoadingSpinner';
 import AlertMessage from '../AlertMessage';
 

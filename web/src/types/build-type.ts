@@ -3,7 +3,3 @@ export type BuildType = {
     name: string;
     created_at: string;
 };
-
-export type CreateBuildType = {
-    name: string;
-};
