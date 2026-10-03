@@ -12,5 +12,31 @@ services:
       MARIADB_DATABASE: ${DB_NAME}
     restart: always
 
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: ${DB_NAME}
+    depends_on:
+      - db
+    restart: always
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    ports:
+      - "127.0.0.1:5173:5173"
+    depends_on:
+      - api
+    restart: always
+
 volumes:
   vol-hardware-manager-db:

@@ -27,7 +27,6 @@ export default function BuildCreate() {
         case: '',
         os: '',
         sound_card: '',
-        warranty: '',
         last_maintenance_at: '',
         last_maintenance_comment: '',
         next_maintenance_at: '',
@@ -42,7 +41,6 @@ export default function BuildCreate() {
             const { id, created_at, ...payload } = {
                 ...build,
                 sound_card: build.sound_card || null,
-                warranty: build.warranty || null,
                 last_maintenance_at: build.last_maintenance_at || null,
                 last_maintenance_comment:
                     build.last_maintenance_comment || null,

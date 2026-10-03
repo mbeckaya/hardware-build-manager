@@ -17,7 +17,6 @@ export const buildSchema = z.object({
     os: z.string().trim().min(1, 'OS is required'),
 
     sound_card: z.string().trim().nullable(),
-    warranty: z.string().trim().nullable(),
     last_maintenance_at: z.string().trim().nullable(),
     last_maintenance_comment: z.string().trim().nullable(),
     next_maintenance_at: z.string().trim().nullable(),

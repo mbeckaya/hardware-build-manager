@@ -1,0 +1,8 @@
+node_modules/
+dist/
+__pycache__/
+*.py[codz]
+*$py.class
+tests/
+.venv
+venv/

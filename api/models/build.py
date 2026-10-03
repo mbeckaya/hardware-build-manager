@@ -18,7 +18,6 @@ class Build(SQLModel, table=True):
     os: str
 
     sound_card: str | None = Field(default=None)
-    warranty: date | None = Field(default=None)
     last_maintenance_at: date | None = Field(default=None)
     last_maintenance_comment: str | None = Field(default=None)
     next_maintenance_at: date | None = Field(default=None)

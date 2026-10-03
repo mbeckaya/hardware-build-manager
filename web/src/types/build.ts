@@ -13,7 +13,6 @@ export type Build = {
     os: string;
 
     sound_card: string | null;
-    warranty: string | null;
     last_maintenance_at: string | null;
     last_maintenance_comment: string | null;
     next_maintenance_at: string | null;
@@ -38,7 +37,6 @@ export type BuildFormErrors = {
     case?: string;
     os?: string;
     sound_card?: string;
-    warranty?: string;
     last_maintenance_at?: string;
     last_maintenance_comment?: string;
     next_maintenance_at?: string;

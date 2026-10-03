@@ -1,19 +1,33 @@
 from datetime import date
+
 from sqlmodel import Session, select, text
+
 from database.database import engine
 from models import Build, BuildType
 
 def seed_database():
     print("Starting database seeding...")
-    
+
     with Session(engine) as session:
         print("Clearing existing data...")
+
+        # Disable foreign key checks temporarily so dependent tables
+        # can be truncated safely.
         session.exec(text("SET FOREIGN_KEY_CHECKS = 0;"))
-        session.exec(text("TRUNCATE TABLE builds;"))
-        session.exec(text("TRUNCATE TABLE build_types;"))
-        session.exec(text("SET FOREIGN_KEY_CHECKS = 1;"))
-        session.commit()
+
+        try:
+            session.exec(text("TRUNCATE TABLE builds;"))
+            session.exec(text("TRUNCATE TABLE build_types;"))
+            session.commit()
+        finally:
+            session.exec(text("SET FOREIGN_KEY_CHECKS = 1;"))
+            session.commit()
+
         print("Tables cleared successfully.")
+
+        # ------------------------------------------------------------------
+        # Build Types
+        # ------------------------------------------------------------------
 
         build_types = [
             BuildType(name="Gaming PC"),
@@ -24,19 +38,42 @@ def seed_database():
             BuildType(name="AI PC"),
         ]
 
-        for bt in build_types:
-            session.add(bt)
+        session.add_all(build_types)
         session.commit()
-        print(f"Successfully inserted {len(build_types)} records for BuildType!")
 
-        gaming_type = session.exec(select(BuildType).where(BuildType.name == "Gaming PC")).first() # type: ignore
-        office_type = session.exec(select(BuildType).where(BuildType.name == "Office PC")).first() # type: ignore
-        workstation_type = session.exec(select(BuildType).where(BuildType.name == "Workstation")).first() # type: ignore
+        # Refresh objects so generated IDs are available.
+        for build_type in build_types:
+            session.refresh(build_type)
+
+        print(
+            f"Successfully inserted "
+            f"{len(build_types)} records for BuildType!"
+        )
+
+        # ------------------------------------------------------------------
+        # Build Type IDs
+        # ------------------------------------------------------------------
+
+        gaming_type = next(
+            bt for bt in build_types if bt.name == "Gaming PC"
+        )
+
+        office_type = next(
+            bt for bt in build_types if bt.name == "Office PC"
+        )
+
+        workstation_type = next(
+            bt for bt in build_types if bt.name == "Workstation"
+        )
+
+        # ------------------------------------------------------------------
+        # Builds
+        # ------------------------------------------------------------------
 
         builds = [
             Build(
                 name="Apex Predator Gaming",
-                build_type_id=gaming_type.id if gaming_type else 1,
+                build_type_id=gaming_type.id,
                 cpu="AMD Ryzen 7 7800X3D",
                 gpu="NVIDIA GeForce RTX 4080 Super",
                 ram="32GB DDR5-6000",
@@ -47,13 +84,12 @@ def seed_database():
                 case="Corsair 4000D Airflow",
                 os="Windows 11 Pro",
                 sound_card=None,
-                warranty=date(2029, 6, 15),
                 last_maintenance_at=date(2025, 1, 10),
-                next_maintenance_at=date(2026, 7, 10)
+                next_maintenance_at=date(2026, 7, 10),
             ),
             Build(
                 name="Office Workhorse Basic",
-                build_type_id=office_type.id if office_type else 2,
+                build_type_id=office_type.id,
                 cpu="Intel Core i5-13400",
                 gpu="Intel UHD Graphics 730",
                 ram="16GB DDR4-3200",
@@ -64,13 +100,12 @@ def seed_database():
                 case="BeQuiet Pure Base 500",
                 os="Windows 11 Home",
                 sound_card=None,
-                warranty=date(2028, 3, 20),
                 last_maintenance_at=None,
-                next_maintenance_at=None
+                next_maintenance_at=None,
             ),
             Build(
                 name="DeepLearning Beast",
-                build_type_id=workstation_type.id if workstation_type else 3,
+                build_type_id=workstation_type.id,
                 cpu="AMD Ryzen Threadripper 7960X",
                 gpu="NVIDIA RTX 6000 Ada Generation",
                 ram="128GB DDR5 ECC",
@@ -81,17 +116,18 @@ def seed_database():
                 case="Fractal Design Torrent",
                 os="Ubuntu 24.04 LTS",
                 sound_card="Creative Sound Blaster Z",
-                warranty=date(2031, 1, 1),
                 last_maintenance_at=date(2026, 2, 1),
-                next_maintenance_at=date(2027, 2, 1)
-            )
+                next_maintenance_at=date(2027, 2, 1),
+            ),
         ]
 
-        for build in builds:
-            session.add(build)
-
+        session.add_all(builds)
         session.commit()
-        print(f"Successfully inserted {len(builds)} records for Build!")
+
+        print(
+            f"Successfully inserted "
+            f"{len(builds)} records for Build!"
+        )
 
         print("Database seeding completed.")
 

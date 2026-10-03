@@ -53,7 +53,6 @@ export default function BuildForm({ data, onSubmitSuccess }: Props) {
                 case: fieldErrors.case?.[0],
                 os: fieldErrors.os?.[0],
                 sound_card: fieldErrors.sound_card?.[0],
-                warranty: fieldErrors.warranty?.[0],
                 last_maintenance_at: fieldErrors.last_maintenance_at?.[0],
                 last_maintenance_comment:
                     fieldErrors.last_maintenance_comment?.[0],
@@ -253,23 +252,7 @@ export default function BuildForm({ data, onSubmitSuccess }: Props) {
                 />
             </FormInputRow>
 
-            <div className="divider">Warranty & Maintenance</div>
-
-            {/* Warranty */}
-            <FormInputRow
-                id="warranty"
-                label="Warranty"
-                error={formErrors?.warranty}
-            >
-                <input
-                    id="warranty"
-                    name="warranty"
-                    type="text"
-                    value={formData.warranty ?? ''}
-                    onChange={handleChange}
-                    className="input input-bordered w-full"
-                />
-            </FormInputRow>
+            <div className="divider">Maintenance</div>
 
             {/* Last Maintenance */}
             <FormInputRow

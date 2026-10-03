@@ -25,7 +25,6 @@ def get_payload():
         "os": "Windows 11 Pro",
         "sound_card": None,
         "ram": "32GB DDR5-6000",
-        "warranty": "2029-06-15"
     }
 
     random_name = ''.join(

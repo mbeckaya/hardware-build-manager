@@ -63,7 +63,7 @@ export default function BuildCard({ build }: Props) {
                     )}
                 </div>
 
-                {(build.next_maintenance_at || build.warranty) && (
+                {(build.next_maintenance_at) && (
                     <div className="flex flex-wrap gap-4 pt-3 border-t border-base-200 text-xs text-base-content/70">
                         {build.next_maintenance_at && (
                             <div className="flex items-center gap-1.5">
@@ -72,16 +72,6 @@ export default function BuildCard({ build }: Props) {
                                 </span>
                                 <span className="badge badge-warning badge-sm">
                                     {build.next_maintenance_at}
-                                </span>
-                            </div>
-                        )}
-                        {build.warranty && (
-                            <div className="flex items-center gap-1.5">
-                                <span className="font-semibold">
-                                    Warranty Until:
-                                </span>
-                                <span className="badge badge-success badge-sm">
-                                    {build.warranty}
                                 </span>
                             </div>
                         )}
