@@ -1,26 +1,22 @@
 # Hardware Build Manager
 
-<!-- > 🚧 **Status: In Planning** -->
-
-
-> 🚧 **Status: In Progress**
-
-
-<!--
 > ✅ **Status: Completed**
--->
 
-<!--
-> 🔄 **Status: Maintenance**
--->
+A full-stack application for creating, managing, and tracking computer builds.
 
-A full-stack application for creating, managing, and tracking computer builds, hardware components, compatibility, purchases, maintenance, and upgrades.
+The **Hardware Build Manager** provides a structured way to manage computer configurations, hardware specifications, build types, and maintenance information.
+
+The current version provides a fully functional application with a React frontend, FastAPI backend, MariaDB database, and Docker-based development environment.
+
+---
 
 ## About the Project
 
-The project aims to provide a structured way to manage computer systems and their hardware components instead of relying on spreadsheets or scattered notes.
+The Hardware Build Manager is designed to provide a central place for managing computer systems and their hardware configurations.
 
-The application is designed to support different types of computer systems, such as:
+Instead of relying on spreadsheets or scattered notes, the application provides a structured way to create and maintain computer builds.
+
+Builds can represent different types of computer systems, including:
 
 * Gaming PCs
 * Office PCs
@@ -29,82 +25,199 @@ The application is designed to support different types of computer systems, such
 * Video Editing PCs
 * AI PCs
 
-## Project Status
+The current implementation focuses on the core functionality required to manage these configurations. The project may be extended with additional functionality over time.
 
-The project is currently in the planning phase.
+---
 
-The initial MVP will focus on the core concepts of:
+## Features
 
-* **Builds**
-* **Hardware Components**
+### Build Management
 
-The exact domain model, features, architecture, and technology stack are still being explored and will evolve during development.
+Computer builds can be created and managed through the application.
 
-## MVP
+A build can contain information about:
 
-The initial version is planned to provide a foundation for:
+* Build name
+* Build type
+* CPU
+* GPU
+* Mainboard
+* RAM
+* Storage
+* CPU cooler
+* Power supply
+* Case
+* Sound card
+* Operating system
+* Creation date
+* Last maintenance date
+* Next maintenance date
+* Maintenance comments
 
-* Creating and managing computer builds
-* Creating and managing hardware components
-* Associating components with builds
-* Storing relevant hardware information
+Builds support complete CRUD functionality:
 
-Additional functionality will be defined as the project evolves.
+* Create
+* Read
+* Update
+* Delete
+
+### Build Types
+
+Build types can be used to categorize computer builds.
+
+Examples include:
+
+* Gaming PC
+* Office PC
+* Workstation
+* Streaming PC
+* Video Editing PC
+* AI PC
+
+Build types also support complete CRUD functionality.
+
+### REST API
+
+The backend provides a versioned REST API for managing the application's data.
+
+The API is built with **FastAPI** and provides automatic interactive API documentation through Swagger UI.
+
+### Data Validation
+
+Request and response data is validated using structured models with **Pydantic** and **SQLModel**.
+
+### Database
+
+Application data is stored persistently in a **MariaDB** relational database.
+
+Database schema changes are managed using **Alembic** migrations.
+
+### Testing
+
+The backend includes API tests using **pytest** and **HTTPX**.
+
+The current test suite covers the CRUD lifecycle of the main API resources, including:
+
+* Retrieving collections
+* Retrieving individual resources
+* Creating resources
+* Updating resources
+* Deleting resources
+* Validating API responses
+* Verifying HTTP status codes
+
+---
+
+## Architecture
+
+The application consists of a React frontend, a FastAPI backend, and a MariaDB database.
+
+```text
+┌─────────────────────┐
+│      Frontend       │
+│ React + TypeScript  │
+└──────────┬──────────┘
+           │
+           │ REST API
+           ▼
+┌─────────────────────┐
+│       Backend       │
+│ Python + FastAPI    │
+└──────────┬──────────┘
+           │
+           │ SQL
+           ▼
+┌─────────────────────┐
+│      Database       │
+│      MariaDB        │
+└─────────────────────┘
+```
+
+The frontend communicates with the backend through the REST API.
+
+The backend is responsible for API handling, data validation, application logic, and database access.
+
+MariaDB provides persistent storage for the application.
+
+All required services can be run using Docker and Docker Compose.
+
+---
 
 ## Tech Stack
 
 ### Backend
 
-- ⚡ **Python + FastAPI** — High-performance asynchronous REST API
-- 📐 **Pydantic** — Data validation and settings management
-- 🗃️ **SQLModel & Alembic** — Modern Python ORM (built on SQLAlchemy) & database migrations
-- 🗄️ **MariaDB** — Relational database
-- 🧪 **pytest & HTTPX** — API testing
+* ⚡ **Python + FastAPI** — REST API framework
+* 📐 **Pydantic** — Data validation and settings management
+* 🗃️ **SQLModel** — ORM and database models
+* 🔄 **Alembic** — Database migrations
+* 🗄️ **MariaDB** — Relational database
+* 🧪 **pytest + HTTPX** — API testing
 
 ### Frontend
 
-- ⚛️ **React + TypeScript**
-- 🧰 **Redux Toolkit + RTK Query** — State management & efficient data fetching
-- 🎨 **Tailwind CSS + daisyUI** — UI styling & components
+* ⚛️ **React + TypeScript** — User interface
+* 🧰 **Redux Toolkit** — State management
+* 🔄 **RTK Query** — API communication and data fetching
+* 🎨 **Tailwind CSS** — UI styling
+* 🌼 **daisyUI** — UI components
 
 ### Infrastructure
 
-- 🐳 **Docker + Docker Compose**
+* 🐳 **Docker** — Containerization
+* 🐳 **Docker Compose** — Development environment and service orchestration
+
+---
 
 ## Project Structure
 
 ```text
 hardware-build-manager/
-├── api/   # Python + FastAPI + SQLModel + Alembic
-└── web/   # React + TypeScript + Redux Toolkit
+│
+├── api/                    # Python + FastAPI backend
+│
+└── web/                    # React + TypeScript frontend
 ```
 
-<!-- ```shell
-    docker compose up -d --build
+The `api/` directory contains the backend application, database models, migrations, and tests.
 
-    python -m venv .venv
+The `web/` directory contains the frontend application and client-side state management.
 
-    .venv\Scripts\Activate.ps1
+---
 
-    pip install fastapi uvicorn sqlmodel pymysql alembic
+## Development
 
-    pip freeze > requirements.txt 
+The application is designed to run in a Docker-based development environment using Docker Compose.
 
-    alembic init alembic    
+The main components are:
 
-    alembic revision --autogenerate -m "create tasks table"
+```text
+React
+  │
+  ▼
+FastAPI
+  │
+  ▼
+MariaDB
+```
 
-    alembic upgrade head 
+This provides a self-contained environment for running the frontend, backend, and database together.
 
-    alembic downgrade base
+---
 
-    python -m database.seed
+## API Documentation
 
-    uvicorn main:app --reload
+The FastAPI backend automatically provides interactive API documentation through **Swagger UI**.
 
-    python -m pytest
+The API documentation can be used to explore and test the available endpoints directly.
 
-    npm install
+---
 
-    npm run dev
-``` -->
+## Future Development
+
+The current implementation provides the foundation of the Hardware Build Manager.
+
+The project may be extended with additional functionality in the future as new ideas and requirements emerge.
+
+The exact scope and direction of future development are intentionally left open.
+
