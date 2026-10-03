@@ -18,6 +18,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
+    volumes:
+      - ./api:/api
     environment:
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
@@ -34,6 +36,9 @@ services:
       dockerfile: Dockerfile
     ports:
       - "127.0.0.1:5173:5173"
+    volumes:
+      - ./web:/web
+      - /web/node_modules
     depends_on:
       - api
     restart: always
