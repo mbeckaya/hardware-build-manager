@@ -17,16 +17,37 @@ export default function BuildCreate() {
         id: -1,
         name: '',
         build_type_id: 1,
-        cpu: '',
-        gpu: '',
-        ram: '',
-        storage: '',
-        psu: '',
-        mainboard: '',
-        cpu_cooler: '',
-        case: '',
-        os: '',
-        sound_card: '',
+
+        cpu_name: '',
+        cpu_service_at: '',
+
+        gpu_name: '',
+        gpu_service_at: '',
+
+        ram_name: '',
+        ram_service_at: '',
+
+        storage_name: '',
+        storage_service_at: '',
+
+        psu_name: '',
+        psu_service_at: '',
+
+        mainboard_name: '',
+        mainboard_service_at: '',
+
+        cpu_cooler_name: '',
+        cpu_cooler_service_at: '',
+
+        case_name: '',
+        case_service_at: '',
+
+        os_name: '',
+        os_service_at: '',
+
+        sound_card_name: '',
+        sound_card_service_at: '',
+
         last_maintenance_at: '',
         last_maintenance_comment: '',
         next_maintenance_at: '',
@@ -40,7 +61,7 @@ export default function BuildCreate() {
 
             const { id, created_at, ...payload } = {
                 ...build,
-                sound_card: build.sound_card || null,
+                sound_card_name: build.sound_card_name || null,
                 last_maintenance_at: build.last_maintenance_at || null,
                 last_maintenance_comment:
                     build.last_maintenance_comment || null,

@@ -1,4 +1,3 @@
-
 import type { BuildWithMappedType } from '../../types/build';
 
 import BuildCardRow from './BuildCardRow';
@@ -35,35 +34,60 @@ export default function BuildCard({ build }: Props) {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3 text-sm">
                     <BuildCardRow
                         label="CPU"
-                        value={
-                            <>
-                                {build.cpu}
-                                {build.cpu_cooler && (
-                                    <span className="text-xs text-base-content/60 block">
-                                        Cooler: {build.cpu_cooler}
-                                    </span>
-                                )}
-                            </>
-                        }
+                        value={build.cpu_name}
+                        since={build.cpu_service_at}
+                    />
+                    <BuildCardRow
+                        label="GPU"
+                        value={build.gpu_name}
+                        since={build.gpu_service_at}
+                    />
+                    <BuildCardRow
+                        label="CPU-Cooler"
+                        value={build.cpu_cooler_name}
+                        since={build.cpu_cooler_service_at}
+                    />
+                    <BuildCardRow
+                        label="RAM"
+                        value={build.ram_name}
+                        since={build.ram_service_at}
+                    />
+                    <BuildCardRow
+                        label="Mainboard"
+                        value={build.mainboard_name}
+                        since={build.mainboard_service_at}
+                    />
+                    <BuildCardRow
+                        label="Storage"
+                        value={build.storage_name}
+                        since={build.storage_service_at}
+                    />
+                    <BuildCardRow
+                        label="Power Supply"
+                        value={build.psu_name}
+                        since={build.psu_service_at}
+                    />
+                    <BuildCardRow
+                        label="Case"
+                        value={build.case_name}
+                        since={build.case_service_at}
+                    />
+                    <BuildCardRow
+                        label="OS"
+                        value={build.os_name}
+                        since={build.os_service_at}
                     />
 
-                    <BuildCardRow label="GPU" value={build.gpu} />
-                    <BuildCardRow label="RAM" value={build.ram} />
-                    <BuildCardRow label="Mainboard" value={build.mainboard} />
-                    <BuildCardRow label="Storage" value={build.storage} />
-                    <BuildCardRow label="Power Supply" value={build.psu} />
-                    <BuildCardRow label="Case" value={build.case} />
-                    <BuildCardRow label="OS" value={build.os} />
-
-                    {build.sound_card && (
+                    {build.sound_card_name && (
                         <BuildCardRow
                             label="Sound Card"
-                            value={build.sound_card}
+                            value={build.sound_card_name}
+                            since={build.sound_card_service_at}
                         />
                     )}
                 </div>
 
-                {(build.next_maintenance_at) && (
+                {build.next_maintenance_at && (
                     <div className="flex flex-wrap gap-4 pt-3 border-t border-base-200 text-xs text-base-content/70">
                         {build.next_maintenance_at && (
                             <div className="flex items-center gap-1.5">
