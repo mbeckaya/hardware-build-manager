@@ -11,10 +11,13 @@ export default function Navbar() {
             <div className="flex-none">
                 <ul className="menu menu-horizontal px-1">
                     <li>
-                        <Link to="/">List</Link>
+                        <Link to="/">Build List</Link>
                     </li>
                     <li>
-                        <Link to="/builds/new">New</Link>
+                        <Link to="/builds/new">New Build</Link>
+                    </li>
+                    <li>
+                        <a href="/api/v1/builds/export">Export Builds</a>
                     </li>
                 </ul>
             </div>
