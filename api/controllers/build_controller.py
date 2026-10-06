@@ -1,10 +1,14 @@
+from csv import writer
+from datetime import datetime
 from fastapi import Depends
+from fastapi.responses import FileResponse
 from sqlmodel import Session, select
 from sqlalchemy.exc import IntegrityError
 
 from controllers.base_controller import BaseController
 from database.database import get_session
 from models.build import Build
+from utils.csv_exporter import CsvExporter
 
 class BuildController(BaseController):
     def __init__(self, session: Session = Depends(get_session)):
@@ -72,3 +76,49 @@ class BuildController(BaseController):
         except Exception:
             self._session.rollback()
             self.err_default()
+
+    def export_csv(self) -> FileResponse:
+        fields = [
+            "id",
+            "name",
+            "build_type_id",
+            "cpu_name",
+            "gpu_name",
+            "ram_name",
+            "storage_name",
+            "psu_name",
+            "mainboard_name",
+            "cpu_cooler_name",
+            "case_name",
+            "os_name",
+            "sound_card_name",
+            "last_maintenance_at",
+            "last_maintenance_comment",
+            "next_maintenance_at",
+            "next_maintenance_comment",
+            "created_at",
+        ]
+
+        builds = self._session.exec(select(Build)).all()
+
+        rows = []
+        
+        for build in builds:
+            row = []
+
+            for field in fields:
+                value = getattr(build, field)
+                row.append(value)
+
+            rows.append(row)
+
+        headers = fields
+
+        csv_exporter = CsvExporter("builds")
+        csv_exporter.generate(headers, rows)
+
+        return FileResponse(
+            path=csv_exporter.get_path(),
+            media_type="text/csv",
+            filename=csv_exporter.get_filename(),
+        )

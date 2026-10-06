@@ -83,11 +83,11 @@ export default function BuildList() {
                             <td>{build.id}</td>
                             <td>{build.name}</td>
                             <td>{build.build_type}</td>
-                            <td>{build.cpu}</td>
-                            <td>{build.gpu}</td>
-                            <td>{build.ram}</td>
-                            <td>{build.storage}</td>
-                            <td>{build.os}</td>
+                            <td>{build.cpu_name}</td>
+                            <td>{build.gpu_name}</td>
+                            <td>{build.ram_name}</td>
+                            <td>{build.storage_name}</td>
+                            <td>{build.os_name}</td>
                             <td>{build.next_maintenance_at ?? '-'}</td>
                             <td className="flex gap-2">
                                 <Link

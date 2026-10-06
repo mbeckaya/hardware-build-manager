@@ -9,22 +9,22 @@ BASE_URL = "http://127.0.0.1:8000/api/v1/builds"
 
 def get_payload():
     payload = {
-        "storage": "2TB NVMe PCIe 4.0 SSD",
+        "storage_name": "2TB NVMe PCIe 4.0 SSD",
         "last_maintenance_at": "2025-01-10",
-        "psu": "850W 80+ Gold",
+        "psu_name": "850W 80+ Gold",
         "last_maintenance_comment": None,
         "build_type_id": 1,
-        "mainboard": "MSI MAG B650 TOMAHAWK WIFI",
+        "mainboard_name": "MSI MAG B650 TOMAHAWK WIFI",
         "next_maintenance_at": "2026-07-10",
-        "cpu_cooler": "Thermalright Peerless Assassin 120",
+        "cpu_cooler_name": "Thermalright Peerless Assassin 120",
         "next_maintenance_comment": None,
-        "case": "Corsair 4000D Airflow",
+        "case_name": "Corsair 4000D Airflow",
         "created_at": "2026-09-30",
-        "cpu": "AMD Ryzen 7 7800X3D",
-        "gpu": "NVIDIA GeForce RTX 4085 Super",
-        "os": "Windows 11 Pro",
-        "sound_card": None,
-        "ram": "32GB DDR5-6000",
+        "cpu_name": "AMD Ryzen 7 7800X3D",
+        "gpu_name": "NVIDIA GeForce RTX 4085 Super",
+        "os_name": "Windows 11 Pro",
+        "sound_card_name": None,
+        "ram_name": "32GB DDR5-6000",
     }
 
     random_name = ''.join(
@@ -74,7 +74,7 @@ def test_create_build():
 
 def test_update_build():
     payload = get_payload()
-    payload["cpu"] = "AMD AI 10000"
+    payload["cpu_name"] = "AMD AI 10000"
 
     with httpx.Client(base_url=BASE_URL) as client:
         response = client.put("/1", json=payload)
@@ -84,7 +84,7 @@ def test_update_build():
     build = Build.model_validate(response.json())
         
     assert isinstance(build, Build)
-    assert build.cpu == "AMD AI 10000"
+    assert build.cpu_name == "AMD AI 10000"
 
 def test_delete_build():
     build = create_build()
