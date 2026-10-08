@@ -1,31 +1,8 @@
 # Hardware Build Manager
 
-> ✅ **Status: Completed**
+A full-stack application for creating, managing, maintaining, and exporting computer builds.
 
-A full-stack application for creating, managing, and tracking computer builds.
-
-The **Hardware Build Manager** provides a structured way to manage computer configurations, hardware specifications, build types, and maintenance information.
-
-The current version provides a fully functional application with a React frontend, FastAPI backend, MariaDB database, and Docker-based development environment.
-
----
-
-## About the Project
-
-The Hardware Build Manager is designed to provide a central place for managing computer systems and their hardware configurations.
-
-Instead of relying on spreadsheets or scattered notes, the application provides a structured way to create and maintain computer builds.
-
-Builds can represent different types of computer systems, including:
-
-* Gaming PCs
-* Office PCs
-* Workstations
-* Streaming PCs
-* Video Editing PCs
-* AI PCs
-
-The current implementation focuses on the core functionality required to manage these configurations. The project may be extended with additional functionality over time.
+The project demonstrates a modern web application architecture with a **React + TypeScript frontend**, **FastAPI backend**, **MariaDB database**, and **Docker-based development environment**.
 
 ---
 
@@ -33,139 +10,212 @@ The current implementation focuses on the core functionality required to manage 
 
 ### Build Management
 
-Computer builds can be created and managed through the application.
+Computer builds support full **CRUD functionality** and contain structured hardware and maintenance data.
 
-A build can contain information about:
+Each Build includes:
 
-* Build name
-* Build type
-* CPU
-* GPU
-* Mainboard
-* RAM
-* Storage
-* CPU cooler
-* Power supply
-* Case
-* Sound card
-* Operating system
-* Creation date
-* Last maintenance date
-* Next maintenance date
-* Maintenance comments
+**General**
+- Unique build name
+- Build type
+- Creation date
 
-Builds support complete CRUD functionality:
+**CPU**
+- CPU name
+- CPU service date
 
-* Create
-* Read
-* Update
-* Delete
+**GPU**
+- GPU name
+- GPU service date
 
-### Build Types
+**RAM**
+- RAM name
+- RAM service date
 
-Build types can be used to categorize computer builds.
+**Storage**
+- Storage name
+- Storage service date
 
-Examples include:
+**Power Supply**
+- PSU name
+- PSU service date
 
-* Gaming PC
-* Office PC
-* Workstation
-* Streaming PC
-* Video Editing PC
-* AI PC
+**Mainboard**
+- Mainboard name
+- Mainboard service date
 
-Build types also support complete CRUD functionality.
+**CPU Cooler**
+- CPU cooler name
+- CPU cooler service date
 
-### REST API
+**Case**
+- Case name
+- Case service date
 
-The backend provides a versioned REST API for managing the application's data.
+**Operating System**
+- Operating system name
+- OS service date
 
-The API is built with **FastAPI** and provides automatic interactive API documentation through Swagger UI.
+**Sound Card**
+- Optional sound card
+- Sound card service date
 
-### Data Validation
+**Maintenance**
+- Last maintenance date
+- Last maintenance comment
+- Next maintenance date
+- Next maintenance comment
 
-Request and response data is validated using structured models with **Pydantic** and **SQLModel**.
-
-### Database
-
-Application data is stored persistently in a **MariaDB** relational database.
-
-Database schema changes are managed using **Alembic** migrations.
-
-### Testing
-
-The backend includes API tests using **pytest** and **HTTPX**.
-
-The current test suite covers the CRUD lifecycle of the main API resources, including:
-
-* Retrieving collections
-* Retrieving individual resources
-* Creating resources
-* Updating resources
-* Deleting resources
-* Validating API responses
-* Verifying HTTP status codes
-
----
-
-## Architecture
-
-The application consists of a React frontend, a FastAPI backend, and a MariaDB database.
-
-```text
-┌─────────────────────┐
-│      Frontend       │
-│ React + TypeScript  │
-└──────────┬──────────┘
-           │
-           │ REST API
-           ▼
-┌─────────────────────┐
-│       Backend       │
-│ Python + FastAPI    │
-└──────────┬──────────┘
-           │
-           │ SQL
-           ▼
-┌─────────────────────┐
-│      Database       │
-│      MariaDB        │
-└─────────────────────┘
-```
-
-The frontend communicates with the backend through the REST API.
-
-The backend is responsible for API handling, data validation, application logic, and database access.
-
-MariaDB provides persistent storage for the application.
-
-All required services can be run using Docker and Docker Compose.
+The model uses structured relationships, validation, optional fields, unique constraints, and indexed foreign keys.
 
 ---
 
 ## Tech Stack
 
-### Backend
-
-* ⚡ **Python + FastAPI** — REST API framework
-* 📐 **Pydantic** — Data validation and settings management
-* 🗃️ **SQLModel** — ORM and database models
-* 🔄 **Alembic** — Database migrations
-* 🗄️ **MariaDB** — Relational database
-* 🧪 **pytest + HTTPX** — API testing
-
 ### Frontend
+- ⚛️ **React + TypeScript** — Component-based user interface
+- 🧰 **Redux Toolkit** — Application state management
+- 🔄 **RTK Query** — API communication and server-state management
+- 🎨 **Tailwind CSS** — Utility-first styling
+- 🌼 **daisyUI** — Reusable UI components
 
-* ⚛️ **React + TypeScript** — User interface
-* 🧰 **Redux Toolkit** — State management
-* 🔄 **RTK Query** — API communication and data fetching
-* 🎨 **Tailwind CSS** — UI styling
-* 🌼 **daisyUI** — UI components
+### Backend
+- 🐍 **Python + FastAPI** — Versioned REST API
+- 📐 **Pydantic** — Request and response validation
+- 🗃️ **SQLModel** — ORM and typed database models
+- 📄 **CSV Export** — Structured Build data export
+
+### Database & Persistence
+- 🗄️ **MariaDB** — Relational database
+- 🔄 **Alembic** — Database schema migrations
+- 🔗 **Foreign Keys & Indexes** — Relational data modeling
+- ✅ **Constraints & Validation** — Data integrity and consistency
+
+### Testing
+- 🧪 **pytest** — Backend/API testing
+- 🌐 **HTTPX** — HTTP client for API tests
 
 ### Infrastructure
+- 🐳 **Docker** — Containerization
+- 🐳 **Docker Compose** — Multi-service development environment
 
-* 🐳 **Docker** — Containerization
-* 🐳 **Docker Compose** — Development environment and service orchestration
+### API & Documentation
+- 📖 **OpenAPI / Swagger UI** — Interactive API documentation
+- 🔌 **REST** — Communication between frontend and backend
+
+---
+
+### Build Types
+
+Builds can be categorized using configurable build types, for example:
+
+- Gaming PC
+- Office PC
+- Workstation
+- Streaming PC
+- Video Editing PC
+- AI PC
+
+Build types support full **CRUD operations**.
+
+---
+
+### CSV Export
+
+Build data can be exported as a **structured CSV file**.
+
+The export includes the extended Build data model, including:
+
+- Build information
+- Hardware components
+- Component service dates
+- Maintenance dates
+- Maintenance comments
+- Optional components
+
+This provides a standardized format for further processing, reporting, spreadsheet applications, or external systems.
+
+---
+
+### REST API
+
+The backend provides a **versioned REST API** built with FastAPI.
+
+Key capabilities include:
+
+- CRUD operations for Builds
+- CRUD operations for Build Types
+- Structured request and response models
+- Pydantic validation
+- Extended Build data support
+- CSV export
+- Automatic Swagger/OpenAPI documentation
+
+---
+
+### Database & Persistence
+
+- **MariaDB** for persistent relational storage
+- **SQLModel** for ORM and database models
+- **Alembic** for database migrations
+- Foreign-key relationship between Builds and Build Types
+- Unique constraint for Build names
+- Indexed Build Type references
+- Extended Build schema supporting hardware and maintenance data
+
+### Testing
+
+Backend API tests use **pytest + HTTPX** and cover:
+
+- Collection retrieval
+- Individual resource retrieval
+- Resource creation
+- Resource updates
+- Resource deletion
+- Response validation
+- HTTP status codes
+
+---
+
+## Architecture
+
+```text
+┌─────────────────────────┐
+│ React + TypeScript      │
+│ Redux Toolkit           │
+│ RTK Query               │
+│ Tailwind CSS + daisyUI  │
+└────────────┬────────────┘
+             │ REST API
+             ▼
+┌─────────────────────────┐
+│ FastAPI                 │
+│ Pydantic + SQLModel     │
+│ Build Management        │
+│ Maintenance Data        │
+│ CSV Export              │
+└────────────┬────────────┘
+             │ SQL
+             ▼
+┌─────────────────────────┐
+│ MariaDB                 │
+│ Alembic Migrations      │
+└─────────────────────────┘
+```
+
+The frontend communicates with the backend through the REST API.
+
+The backend handles:
+
+- API requests
+- Data validation
+- Build management
+- Persistence
+- Maintenance data
+- CSV export
+
+MariaDB provides persistent relational storage.
+
+All services can be run using **Docker Compose**.
 
 ---
 
@@ -173,51 +223,43 @@ All required services can be run using Docker and Docker Compose.
 
 ```text
 hardware-build-manager/
-│
-├── api/                    # Python + FastAPI backend
-│
-└── web/                    # React + TypeScript frontend
+├── api/    # FastAPI backend, models, migrations and tests
+└── web/    # React + TypeScript frontend
 ```
 
-The `api/` directory contains the backend application, database models, migrations, and tests.
+The `api/` directory contains the backend application, database models, migrations, API logic, CSV export functionality, and tests.
 
-The `web/` directory contains the frontend application and client-side state management.
-
----
-
-## Development
-
-The application is designed to run in a Docker-based development environment using Docker Compose.
-
-The main components are:
-
-```text
-React
-  │
-  ▼
-FastAPI
-  │
-  ▼
-MariaDB
-```
-
-This provides a self-contained environment for running the frontend, backend, and database together.
+The `web/` directory contains the React frontend, UI components, and client-side state management.
 
 ---
 
 ## API Documentation
 
-The FastAPI backend automatically provides interactive API documentation through **Swagger UI**.
+FastAPI automatically provides interactive **Swagger/OpenAPI documentation** for exploring and testing the available endpoints.
 
-The API documentation can be used to explore and test the available endpoints directly.
+The API documentation exposes the structured Build data model and its available operations.
+
+---
+
+## Development
+
+The complete development environment can be started using **Docker Compose**:
+
+```text
+React → FastAPI → MariaDB
+```
+
+The containerized setup provides a consistent development environment for frontend, backend, and database services.
 
 ---
 
 ## Future Development
 
-The current implementation provides the foundation of the Hardware Build Manager.
+The current implementation provides the foundation for further functionality around:
 
-The project may be extended with additional functionality in the future as new ideas and requirements emerge.
-
-The exact scope and direction of future development are intentionally left open.
-
+- Computer build management
+- Component maintenance tracking
+- Data export
+- Reporting and analysis
+- External integrations
+- Additional build and maintenance features
