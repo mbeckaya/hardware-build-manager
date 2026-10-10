@@ -8,6 +8,12 @@ router = APIRouter(
     tags=["Lifecycles"]
 )
 
+@router.get("/", response_model=list[Lifecycle])
+async def get_lifecycles(
+    controller: LifecycleController = Depends(LifecycleController),
+) -> list[Lifecycle]:
+    return controller.index()
+
 @router.post("/", response_model=Lifecycle, status_code=status.HTTP_201_CREATED)
 async def create_lifecycle(
     lifecycle_new: Lifecycle,

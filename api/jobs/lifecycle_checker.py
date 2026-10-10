@@ -1,5 +1,17 @@
-from datetime import date, datetime
+import logging
 import httpx
+import os
+from datetime import date, datetime
+
+os.makedirs("logs", exist_ok=True)
+
+logging.basicConfig(
+    filename="logs/lifecycle.log",
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+)
+
+logger = logging.getLogger(__name__)
 
 BASE_API_URL = "http://localhost:8000/api/v1"
 BASE_BUILDS_URL = f"{BASE_API_URL}/builds/"
@@ -15,6 +27,16 @@ class LifecycleChecker:
         
         if response.status_code != 200:
             print("Error: Not available builds")
+            return
+    
+        return response.json()
+
+    def get_lifecycles(self) -> list:
+        with httpx.Client(base_url=BASE_LIFECYCLES_URL) as client:
+            response = client.get("/")
+        
+        if response.status_code != 200:
+            print("Error: Not available lifecycles")
             return
     
         return response.json()
@@ -38,7 +60,7 @@ class LifecycleChecker:
 
         return 0
 
-    def create_entry(self, payload: dict):
+    def create_lifecycle(self, payload: dict):
         with httpx.Client(base_url=BASE_LIFECYCLES_URL) as client:
             response = client.post("/", json=payload)
     
@@ -47,9 +69,9 @@ class LifecycleChecker:
                 return
     
             lifecycle = response.json()
-            print(f"New lifecycle added | ID: {lifecycle.get('id')}")
+            print(f"[LIFECYCLE CREATED] | ID: {lifecycle.get('id')}")
 
-    def check(self):
+    def validate(self):
         builds = self.get_builds()
 
         for build in builds:
@@ -65,11 +87,36 @@ class LifecycleChecker:
                     rules
                 )
                 
-                self.create_entry({
+                self.create_lifecycle({
                     "build_id": build["id"],
                     "component_name": name,
                     "component_status": status,
                 })
+
+    def report(self):
+        status_names = {
+            1: "Warning",
+            2: "Critical",
+        }
+
+        lifecycles = self.get_lifecycles()
+        
+        for lifecycle in lifecycles:
+            logger.info(
+                "ID: %s | Build ID: %s | Status: %s | Component: %s | Created at: %s",
+                lifecycle["id"],
+                lifecycle["build_id"],
+                status_names.get(lifecycle["component_status"], lifecycle["component_status"]),
+                lifecycle["component_name"],
+                lifecycle["created_at"],
+            )
+
+            print(
+                f"[LIFECYCLE REPORT] | "
+                f"ID: {lifecycle.get('id')} | "
+                f"Component: {lifecycle.get('component_name')} | "
+                f"Status: {status_names.get(lifecycle.get('component_status'), lifecycle.get('component_status'))}"
+            )
 
 if __name__ == "__main__":
     fields = [
@@ -86,5 +133,5 @@ if __name__ == "__main__":
     ]
 
     lifecycle_checker = LifecycleChecker(fields)
-    lifecycle_checker.check()
-    
+    lifecycle_checker.validate()
+    lifecycle_checker.report()
