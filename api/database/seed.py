@@ -182,34 +182,6 @@ def seed_database():
                 last_maintenance_at=date(2025, 4, 10),
                 next_maintenance_at=date(2027, 4, 10),
             ),
-            
-            # 5. R&D / Lab System
-            Build(
-                name="R&D Testbench",
-                build_type_id=workstation_type.id,
-                cpu_name="AMD Ryzen 9 9950X",
-                cpu_service_at=None,
-                gpu_name="NVIDIA GeForce RTX 4070 Ti Super",
-                gpu_service_at=None,
-                ram_name="32GB DDR5-6400",
-                ram_service_at=None,
-                storage_name="2TB NVMe PCIe 5.0 SSD",
-                storage_service_at=None,
-                psu_name="850W 80+ Gold",
-                psu_service_at=None,
-                mainboard_name="MSI MAG X870 TOMAHAWK",
-                mainboard_service_at=None,
-                cpu_cooler_name="Arctic Liquid Freezer III 360",
-                cpu_cooler_service_at=None,
-                case_name="Lian Li O11 Dynamic EVO",
-                case_service_at=None,
-                os_name="Ubuntu 24.04 LTS",
-                os_service_at=None,
-                sound_card_name=None,
-                sound_card_service_at=None,
-                last_maintenance_at=None,
-                next_maintenance_at=None,
-            ),
         ]
 
         session.add_all(builds)
