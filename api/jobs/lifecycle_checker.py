@@ -5,58 +5,71 @@ BASE_API_URL = "http://localhost:8000/api/v1"
 BASE_BUILDS_URL = f"{BASE_API_URL}/builds/"
 BASE_LIFECYCLES_URL = f"{BASE_API_URL}/lifecycles/"
 
-def create_lifecycle_entry(payload: dict):
-    with httpx.Client(base_url=BASE_LIFECYCLES_URL) as client:
-        response = client.post("/", json=payload)
+class LifecycleChecker:
+    def __init__(self, fields: list):
+        self._fields = fields
 
-        if response.status_code not in (200, 201):
-            print(f"Error: Could not create lifecycle (Status: {response.status_code})")
+    def get_builds(self) -> list:
+        with httpx.Client(base_url=BASE_BUILDS_URL) as client:
+            response = client.get("/")
+        
+        if response.status_code != 200:
+            print("Error: Not available builds")
+            return
+    
+        return response.json()
+
+    def get_status(self, date_value: str, rules: tuple) -> int:
+        year_now = date.today().year
+
+        try:
+            year_field = datetime.strptime(
+                date_value, "%Y-%m-%d"
+            ).date().year
+
+            age_years = year_now - year_field
+            
+            if age_years >= rules[0]:
+                return 2
+            elif age_years >= rules[1]:
+                return 1
+        except (ValueError, TypeError):
             return
 
-        lifecycle = response.json()
-        print(f"New lifecycle added | ID: {lifecycle.get('id')}")
+        return 0
 
+    def create_entry(self, payload: dict):
+        with httpx.Client(base_url=BASE_LIFECYCLES_URL) as client:
+            response = client.post("/", json=payload)
+    
+            if response.status_code not in (200, 201):
+                print(f"Error: Could not create lifecycle (Status: {response.status_code})")
+                return
+    
+            lifecycle = response.json()
+            print(f"New lifecycle added | ID: {lifecycle.get('id')}")
 
-def check_lifecycle(fields: list):
-    with httpx.Client(base_url=BASE_BUILDS_URL) as client:
-        response = client.get("/")
+    def check(self):
+        builds = self.get_builds()
 
-    if response.status_code != 200:
-        print("Error: Not available builds")
-        return
+        for build in builds:
+            for field in fields:
+                name, col_name, rules = field
+    
+                date_value = build.get(col_name)
+                if not date_value:
+                    continue
 
-    builds = response.json()
-    year_now = date.today().year
-
-    for build in builds:
-        for field in fields:
-            name, col_name, rules = field
-
-            date_value = build.get(col_name)
-            if not date_value:
-                continue
-
-            try:
-                year_field = datetime.strptime(
-                    date_value, "%Y-%m-%d"
-                ).date().year
-
-                age_years = year_now - year_field
-                status = 0
-
-                if age_years >= rules[0]:
-                    status = 2
-                elif age_years >= rules[1]:
-                    status = 1
-            except (ValueError, TypeError):
-                continue
-
-            create_lifecycle_entry({
-                "build_id": build["id"],
-                "component_name": name,
-                "component_status": status,
-            })
-
+                status = self.get_status(
+                    date_value,
+                    rules
+                )
+                
+                self.create_entry({
+                    "build_id": build["id"],
+                    "component_name": name,
+                    "component_status": status,
+                })
 
 if __name__ == "__main__":
     fields = [
@@ -72,4 +85,6 @@ if __name__ == "__main__":
         ("sound_card", "sound_card_service_at", (10, 6)),
     ]
 
-    check_lifecycle(fields)
+    lifecycle_checker = LifecycleChecker(fields)
+    lifecycle_checker.check()
+    
