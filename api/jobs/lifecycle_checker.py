@@ -1,17 +1,7 @@
-import logging
 import httpx
-import os
+import json
 from datetime import date, datetime
-
-os.makedirs("logs", exist_ok=True)
-
-logging.basicConfig(
-    filename="logs/lifecycle.log",
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-)
-
-logger = logging.getLogger(__name__)
+from pathlib import Path
 
 BASE_API_URL = "http://localhost:8000/api/v1"
 BASE_BUILDS_URL = f"{BASE_API_URL}/builds/"
@@ -22,101 +12,141 @@ class LifecycleChecker:
         self._fields = fields
 
     def get_builds(self) -> list:
-        with httpx.Client(base_url=BASE_BUILDS_URL) as client:
-            response = client.get("/")
-        
-        if response.status_code != 200:
-            print("Error: Not available builds")
-            return
-    
-        return response.json()
+        try:
+            with httpx.Client(base_url=BASE_BUILDS_URL) as client:
+                response = client.get("/")
+
+            response.raise_for_status()
+            return response.json()
+
+        except (httpx.HTTPError, ValueError) as error:
+            print(f"Error: Could not retrieve builds: {error}")
+            return []
 
     def get_lifecycles(self) -> list:
-        with httpx.Client(base_url=BASE_LIFECYCLES_URL) as client:
-            response = client.get("/")
-        
-        if response.status_code != 200:
-            print("Error: Not available lifecycles")
-            return
-    
-        return response.json()
+        try:
+            with httpx.Client(base_url=BASE_LIFECYCLES_URL) as client:
+                response = client.get("/")
+
+            response.raise_for_status()
+            return response.json()
+
+        except (httpx.HTTPError, ValueError) as error:
+            print(f"Error: Could not retrieve lifecycles: {error}")
+            return []
 
     def get_status(self, date_value: str, rules: tuple) -> int:
-        year_now = date.today().year
-
         try:
-            year_field = datetime.strptime(
+            service_date = datetime.strptime(
                 date_value, "%Y-%m-%d"
-            ).date().year
+            ).date()
 
-            age_years = year_now - year_field
-            
+            age_years = date.today().year - service_date.year
+
             if age_years >= rules[0]:
                 return 2
             elif age_years >= rules[1]:
                 return 1
+
         except (ValueError, TypeError):
-            return
+            return 0
 
         return 0
 
-    def create_lifecycle(self, payload: dict):
-        with httpx.Client(base_url=BASE_LIFECYCLES_URL) as client:
-            response = client.post("/", json=payload)
-    
-            if response.status_code not in (200, 201):
-                print(f"Error: Could not create lifecycle (Status: {response.status_code})")
-                return
-    
-            lifecycle = response.json()
-            print(f"[LIFECYCLE CREATED] | ID: {lifecycle.get('id')}")
+    def create_lifecycle(self, payload: dict) -> bool:
+        try:
+            with httpx.Client(base_url=BASE_LIFECYCLES_URL) as client:
+                response = client.post("/", json=payload)
 
-    def validate(self):
+            if response.status_code not in (200, 201):
+                print(
+                    "Error: Could not create lifecycle "
+                    f"(Status: {response.status_code})"
+                )
+                return False
+
+            lifecycle = response.json()
+            print(
+                "[LIFECYCLE CREATED] | "
+                f"ID: {lifecycle.get('id', 'N/A')}"
+            )
+            return True
+
+        except (httpx.HTTPError, ValueError) as error:
+            print(f"Error: Could not create lifecycle: {error}")
+            return False
+
+    def validate(self) -> None:
         builds = self.get_builds()
 
+        if not builds:
+            print("No builds available.")
+            return
+
         for build in builds:
-            for field in fields:
-                name, col_name, rules = field
-    
+            for name, col_name, rules in self._fields:
                 date_value = build.get(col_name)
+
                 if not date_value:
                     continue
 
-                status = self.get_status(
-                    date_value,
-                    rules
-                )
-                
-                self.create_lifecycle({
+                status = self.get_status(date_value, rules)
+
+                payload = {
                     "build_id": build["id"],
                     "component_name": name,
                     "component_status": status,
-                })
+                }
 
-    def report(self):
+                self.create_lifecycle(payload)
+
+    def report(self) -> str:
         status_names = {
+            0: "OK",
             1: "Warning",
             2: "Critical",
         }
 
         lifecycles = self.get_lifecycles()
-        
+
+        report_data = []
+
         for lifecycle in lifecycles:
-            logger.info(
-                "ID: %s | Build ID: %s | Status: %s | Component: %s | Created at: %s",
-                lifecycle["id"],
-                lifecycle["build_id"],
-                status_names.get(lifecycle["component_status"], lifecycle["component_status"]),
-                lifecycle["component_name"],
-                lifecycle["created_at"],
+            created_at = lifecycle.get("created_at")
+
+            if created_at:
+                created_at = str(created_at)[:10]
+
+            report_data.append({
+                "build_id": lifecycle.get("build_id"),
+                "component_name": lifecycle.get("component_name"),
+                "component_status": status_names.get(
+                    lifecycle.get("component_status"),
+                    lifecycle.get("component_status"),
+                ),
+                "created_at": created_at,
+            })
+
+        export_dir = Path("exports")
+        export_dir.mkdir(parents=True, exist_ok=True)
+
+        timestamp = datetime.now().strftime(
+            "%Y-%m-%d-%H-%M-%S"
+        )
+        output_path = export_dir / f"lifecycles_{timestamp}.json"
+
+        with open(output_path, "w", encoding="utf-8") as file:
+            json.dump(
+                report_data,
+                file,
+                indent=4,
+                ensure_ascii=False,
             )
 
-            print(
-                f"[LIFECYCLE REPORT] | "
-                f"ID: {lifecycle.get('id')} | "
-                f"Component: {lifecycle.get('component_name')} | "
-                f"Status: {status_names.get(lifecycle.get('component_status'), lifecycle.get('component_status'))}"
-            )
+        print(f"[LIFECYCLE REPORT] JSON saved: {output_path}")
+
+        return str(output_path)
+
 
 if __name__ == "__main__":
     fields = [
