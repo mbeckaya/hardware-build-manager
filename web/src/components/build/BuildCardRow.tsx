@@ -1,3 +1,5 @@
+import HealthStatus from '../HealthStatus';
+
 type Props = {
     label: string;
     value: React.ReactNode;
@@ -20,6 +22,8 @@ export default function BuildCardRow({ label, value, since }: Props) {
                     </span>
                 )}
             </div>
+
+            {since && <HealthStatus type="badge" since={since} />}
         </div>
     );
 }

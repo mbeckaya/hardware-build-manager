@@ -20,14 +20,15 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-from models import *
+from models.build import Build
+from models.build_type import BuildType
+from models.lifecycle import Lifecycle
 
 target_metadata = SQLModel.metadata
 
 config.set_main_option("sqlalchemy.url", DATABASE_URL)
 
 def process_revision_directives(context, revision, directives):
-    """Prüft bei autogenerate, ob SQLModel im Code vorkommt und injiziert den Import."""
     script = directives[0]
     
     if script.upgrade_ops.ops:

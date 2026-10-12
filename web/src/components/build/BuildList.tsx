@@ -10,6 +10,7 @@ import type { BuildWithMappedType } from '../../types/build';
 
 import LoadingSpinner from '../LoadingSpinner';
 import AlertMessage from '../AlertMessage';
+import HealthStatus from '../HealthStatus';
 
 export default function BuildList() {
     const {
@@ -70,7 +71,7 @@ export default function BuildList() {
                         <th>CPU</th>
                         <th>GPU</th>
                         <th>RAM</th>
-                        <th>Storage</th>
+                        <th>PSU</th>
                         <th>OS</th>
                         <th>Wartung</th>
                         <th>Actions</th>
@@ -83,11 +84,41 @@ export default function BuildList() {
                             <td>{build.id}</td>
                             <td>{build.name}</td>
                             <td>{build.build_type}</td>
-                            <td>{build.cpu_name}</td>
-                            <td>{build.gpu_name}</td>
-                            <td>{build.ram_name}</td>
-                            <td>{build.storage_name}</td>
-                            <td>{build.os_name}</td>
+                            <td>
+                                <span>{build.cpu_name}</span>
+                                <HealthStatus
+                                    type="bullets"
+                                    since={build.cpu_service_at}
+                                />
+                            </td>
+                            <td>
+                                <span>{build.gpu_name}</span>
+                                <HealthStatus
+                                    type="bullets"
+                                    since={build.gpu_service_at}
+                                />
+                            </td>
+                            <td>
+                                <span>{build.ram_name}</span>
+                                <HealthStatus
+                                    type="bullets"
+                                    since={build.ram_service_at}
+                                />
+                            </td>
+                            <td>
+                                <span>{build.psu_name}</span>
+                                <HealthStatus
+                                    type="bullets"
+                                    since={build.psu_service_at}
+                                />
+                            </td>
+                            <td>
+                                <span>{build.os_name}</span>
+                                <HealthStatus
+                                    type="bullets"
+                                    since={build.os_service_at}
+                                />
+                            </td>
                             <td>{build.next_maintenance_at ?? '-'}</td>
                             <td className="flex gap-2">
                                 <Link

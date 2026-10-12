@@ -1,223 +1,150 @@
 # Hardware Build Manager
 
-> ✅ **Status: Completed**
+A full-stack web application for managing computer builds, tracking hardware maintenance, and exporting structured build data.
 
-A full-stack application for creating, managing, and tracking computer builds.
-
-The **Hardware Build Manager** provides a structured way to manage computer configurations, hardware specifications, build types, and maintenance information.
-
-The current version provides a fully functional application with a React frontend, FastAPI backend, MariaDB database, and Docker-based development environment.
-
----
-
-## About the Project
-
-The Hardware Build Manager is designed to provide a central place for managing computer systems and their hardware configurations.
-
-Instead of relying on spreadsheets or scattered notes, the application provides a structured way to create and maintain computer builds.
-
-Builds can represent different types of computer systems, including:
-
-* Gaming PCs
-* Office PCs
-* Workstations
-* Streaming PCs
-* Video Editing PCs
-* AI PCs
-
-The current implementation focuses on the core functionality required to manage these configurations. The project may be extended with additional functionality over time.
-
----
-
-## Features
-
-### Build Management
-
-Computer builds can be created and managed through the application.
-
-A build can contain information about:
-
-* Build name
-* Build type
-* CPU
-* GPU
-* Mainboard
-* RAM
-* Storage
-* CPU cooler
-* Power supply
-* Case
-* Sound card
-* Operating system
-* Creation date
-* Last maintenance date
-* Next maintenance date
-* Maintenance comments
-
-Builds support complete CRUD functionality:
-
-* Create
-* Read
-* Update
-* Delete
-
-### Build Types
-
-Build types can be used to categorize computer builds.
-
-Examples include:
-
-* Gaming PC
-* Office PC
-* Workstation
-* Streaming PC
-* Video Editing PC
-* AI PC
-
-Build types also support complete CRUD functionality.
-
-### REST API
-
-The backend provides a versioned REST API for managing the application's data.
-
-The API is built with **FastAPI** and provides automatic interactive API documentation through Swagger UI.
-
-### Data Validation
-
-Request and response data is validated using structured models with **Pydantic** and **SQLModel**.
-
-### Database
-
-Application data is stored persistently in a **MariaDB** relational database.
-
-Database schema changes are managed using **Alembic** migrations.
-
-### Testing
-
-The backend includes API tests using **pytest** and **HTTPX**.
-
-The current test suite covers the CRUD lifecycle of the main API resources, including:
-
-* Retrieving collections
-* Retrieving individual resources
-* Creating resources
-* Updating resources
-* Deleting resources
-* Validating API responses
-* Verifying HTTP status codes
-
----
-
-## Architecture
-
-The application consists of a React frontend, a FastAPI backend, and a MariaDB database.
-
-```text
-┌─────────────────────┐
-│      Frontend       │
-│ React + TypeScript  │
-└──────────┬──────────┘
-           │
-           │ REST API
-           ▼
-┌─────────────────────┐
-│       Backend       │
-│ Python + FastAPI    │
-└──────────┬──────────┘
-           │
-           │ SQL
-           ▼
-┌─────────────────────┐
-│      Database       │
-│      MariaDB        │
-└─────────────────────┘
-```
-
-The frontend communicates with the backend through the REST API.
-
-The backend is responsible for API handling, data validation, application logic, and database access.
-
-MariaDB provides persistent storage for the application.
-
-All required services can be run using Docker and Docker Compose.
-
----
+The project demonstrates end-to-end application development using a modern TypeScript frontend, a Python REST API, and a relational database, with a focus on **clean architecture, data integrity, API design, and automated testing**.
 
 ## Tech Stack
 
-### Backend
+- **Frontend:** React, TypeScript, Redux Toolkit, RTK Query, Tailwind CSS, daisyUI
+- **Backend:** Python, FastAPI, Pydantic, SQLModel
+- **Database:** MariaDB, Alembic, relational modeling, foreign keys, indexes, and database constraints
+- **Testing:** pytest, HTTPX
+- **Infrastructure:** Docker, Docker Compose
+- **API:** Versioned REST API, OpenAPI, Swagger UI
+- **Data Export & Reporting:** CSV export, JSON lifecycle reports
 
-* ⚡ **Python + FastAPI** — REST API framework
-* 📐 **Pydantic** — Data validation and settings management
-* 🗃️ **SQLModel** — ORM and database models
-* 🔄 **Alembic** — Database migrations
-* 🗄️ **MariaDB** — Relational database
-* 🧪 **pytest + HTTPX** — API testing
+## Key Features
 
-### Frontend
+### Build Management
 
-* ⚛️ **React + TypeScript** — User interface
-* 🧰 **Redux Toolkit** — State management
-* 🔄 **RTK Query** — API communication and data fetching
-* 🎨 **Tailwind CSS** — UI styling
-* 🌼 **daisyUI** — UI components
+- Full CRUD functionality for computer builds.
+- Structured hardware data covering CPU, GPU, RAM, storage, power supply, mainboard, CPU cooler, case, operating system, and optional sound cards.
+- Build metadata, including unique names, build types, and creation dates.
+- Configurable build types with full CRUD operations, such as Gaming PC, Office PC, Workstation, Streaming PC, Video Editing PC, and AI PC.
 
-### Infrastructure
+### Maintenance Tracking
 
-* 🐳 **Docker** — Containerization
-* 🐳 **Docker Compose** — Development environment and service orchestration
+- Component-specific service dates for all supported hardware categories.
+- Last and upcoming maintenance dates.
+- Maintenance comments and history.
 
----
+### Lifecycle Checker
+
+- **Automated Lifecycle Analysis:** A manually triggered Python job evaluates hardware component lifecycles and identifies warning and critical states based on service life thresholds.
+- **JSON Reporting:** Generates structured lifecycle reports and stores them in the backend for further processing.
+- **Proactive Maintenance Insights:** Helps identify aging hardware components and assess potential maintenance needs.
+
+### CSV Export
+
+- Exports structured build data to CSV.
+- Includes build information, hardware components, component service dates, maintenance dates, comments, and optional components.
+- Supports further processing in spreadsheet applications and external systems.
+
+### REST API
+
+- Versioned REST API built with FastAPI.
+- CRUD endpoints for builds and build types.
+- Structured request and response models with Pydantic validation.
+- Automatic OpenAPI documentation and interactive Swagger UI.
+
+### Database & Data Integrity
+
+- MariaDB for persistent relational storage.
+- SQLModel for ORM and typed database models.
+- Alembic for database schema migrations.
+- Foreign-key relationships between builds and build types.
+- Unique constraints, indexed references, and validated data models.
+
+### Automated API Testing
+
+Backend API tests use **pytest and HTTPX** to cover:
+
+- Collection and individual resource retrieval.
+- Resource creation, updates, and deletion.
+- Response validation and HTTP status codes.
+
+## Architecture
+
+```text
+┌─────────────────────────────────┐
+│ React + TypeScript              │
+│ Redux Toolkit + RTK Query       │
+│ Tailwind CSS + daisyUI          │
+└────────────────┬────────────────┘
+                 │ REST API
+                 ▼
+┌─────────────────────────────────┐
+│ FastAPI                          │
+│ Pydantic + SQLModel              │
+│ Build & Maintenance Management   │
+│ Lifecycle Checker Reports        │
+│ CSV Export                       │
+└────────────────┬────────────────┘
+                 │ SQL
+                 ▼
+┌─────────────────────────────────┐
+│ MariaDB                          │
+│ Alembic Migrations               │
+└─────────────────────────────────┘
+```
+
+The frontend communicates with the backend through the REST API. The backend handles request validation, build management, maintenance data, persistence, lifecycle reports, and CSV exports.
+
+The application services run in a Docker Compose development environment.
 
 ## Project Structure
 
 ```text
 hardware-build-manager/
-│
-├── api/                    # Python + FastAPI backend
-│
-└── web/                    # React + TypeScript frontend
+├── api/    # FastAPI backend, models, migrations, jobs and tests
+└── web/    # React + TypeScript frontend
 ```
 
-The `api/` directory contains the backend application, database models, migrations, and tests.
-
-The `web/` directory contains the frontend application and client-side state management.
-
----
+- **`api/`** contains the backend application, database models, migrations, API logic, lifecycle checker, report handling, CSV export functionality, and tests.
+- **`web/`** contains the React frontend, UI components, and client-side state management.
 
 ## Development
 
-The application is designed to run in a Docker-based development environment using Docker Compose.
+Start the application stack using Docker Compose:
 
-The main components are:
-
-```text
-React
-  │
-  ▼
-FastAPI
-  │
-  ▼
-MariaDB
+```bash
+docker compose up --build -d
 ```
 
-This provides a self-contained environment for running the frontend, backend, and database together.
+### Run Lifecycle Checker
 
----
+Manually execute the hardware lifecycle analysis and generate JSON reports:
+
+```bash
+docker compose exec api python ./jobs/lifecycle_checker.py
+```
+
+### Run Backend Tests
+
+Execute the backend test suite using pytest:
+
+```bash
+docker compose exec api python -m pytest
+```
 
 ## API Documentation
 
-The FastAPI backend automatically provides interactive API documentation through **Swagger UI**.
+FastAPI automatically provides interactive **Swagger/OpenAPI documentation** for exploring and testing available endpoints.
 
-The API documentation can be used to explore and test the available endpoints directly.
+The documentation exposes the API operations and structured request and response models.
 
----
+## Engineering Highlights
 
-## Future Development
+- End-to-end development across frontend, backend, and database layers.
+- Type-safe frontend development and structured backend data models.
+- REST API design with automatic OpenAPI documentation.
+- Relational database design, integrity constraints, and schema versioning.
+- Automated API testing with pytest and HTTPX.
+- Python-based lifecycle analysis with threshold evaluation and JSON report generation.
+- CSV export and structured report handling.
+- Containerized development using Docker and Docker Compose.
 
-The current implementation provides the foundation of the Hardware Build Manager.
+## Project Status
 
-The project may be extended with additional functionality in the future as new ideas and requirements emerge.
-
-The exact scope and direction of future development are intentionally left open.
-
+The project is complete and demonstrates a full-stack application with hardware build management, maintenance tracking, lifecycle analysis, data exports, and automated API testing.
