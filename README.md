@@ -106,10 +106,17 @@ cp .env.example .env
 docker compose up --build -d
 ```
 
-The API waits for MariaDB to become healthy, creates missing database tables,
-and inserts the seed data if both tables are empty. Existing data is left
-untouched on subsequent starts. Set the database credentials in `.env` before
-starting the stack.
+The API waits for MariaDB to become healthy and applies pending Alembic
+migrations on startup. For databases created by the previous startup flow, the
+existing schema is recorded as the initial Alembic revision. The seed data is
+inserted only if both tables are empty; existing data is left untouched. Set
+the database credentials in `.env` before starting the stack.
+
+Create future schema migrations with:
+
+```bash
+docker compose exec api alembic revision --autogenerate -m "describe schema change"
+```
 
 ### Run Backend Tests
 
