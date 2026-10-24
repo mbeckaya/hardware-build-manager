@@ -37,18 +37,18 @@ services:
         condition: service_healthy
     restart: always
 
-  # web:
-  #   build:
-  #     context: ./web
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "127.0.0.1:5173:5173"
-  #   volumes:
-  #     - ./web:/web
-  #     - /web/node_modules
-  #   depends_on:
-  #     - api
-  #   restart: always
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    ports:
+      - "127.0.0.1:5173:5173"
+    volumes:
+      - ./web:/web
+      - /web/node_modules
+    depends_on:
+      - api
+    restart: always
 
 volumes:
   vol-hardware-manager-db:
